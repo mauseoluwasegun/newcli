@@ -498,10 +498,11 @@ export const search = query({
 
     if (!authUser) {
       // Allow unauthenticated users to see empty results
+      // Return proper pagination result expected by usePaginatedQuery
       return {
-        results: [],
-        isLoaded: true,
-        continuation: null,
+        page: [],
+        isDone: true,
+        nextCursor: null,
       };
     }
 
