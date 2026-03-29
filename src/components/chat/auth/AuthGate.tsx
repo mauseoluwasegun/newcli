@@ -18,8 +18,10 @@ const AuthGate = ({ children }: { children: React.ReactNode }) => {
   const session = authClient.useSession();
 
   useEffect(() => {
-    // When a session with a user becomes available, we're ready
-    if (session?.data?.user) {
+    // useSession() returns { data: undefined | null | Session, error: ... }
+    // data is undefined while loading, then null (no session) or Session (has user)
+    // We consider the session "determined" when data is no longer undefined
+    if (session?.data !== undefined) {
       setReady(true);
     }
   }, [session]);
