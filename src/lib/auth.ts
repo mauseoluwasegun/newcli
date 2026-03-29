@@ -1,9 +1,9 @@
 /**
  * === CONVEX SERVER TYPES ===
- * Auto-generated types from Convex. Context object is passed to every Convex function
- * and gives access to the database, auth, etc.
- * Note: Using inferred type to avoid GenericCtx import issues.
+ * Auto-generated types from Convex.
  */
+import type { GenericQueryCtx } from "convex/server";
+import type { DataModel } from "@convex/_generated/dataModel";
 
 /**
  * === CONVEX + BETTER-AUTH INTEGRATION ("@convex-dev/better-auth") ===
@@ -32,7 +32,7 @@ import { betterAuth } from "better-auth";
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-const createOptions = (ctx) => ({
+const createOptions = (ctx: GenericQueryCtx<DataModel>) => ({
   baseURL,
   database: convexAdapter(ctx, betterAuthComponent),
   socialProviders: {
@@ -65,7 +65,7 @@ const createOptions = (ctx) => ({
   ],
 });
 
-export const createAuth = (ctx) => {
+export const createAuth = (ctx: GenericQueryCtx<DataModel>) => {
   const options = createOptions(ctx);
   return betterAuth({
     ...options,
