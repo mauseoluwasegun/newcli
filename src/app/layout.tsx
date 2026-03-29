@@ -29,12 +29,7 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
  * === ANONYMOUS AUTH AUTO-SIGN-IN ===
  * Ensures users are automatically signed in as anonymous if they don't have a session.
  */
-import { useEnsureAuthSession } from "@/hooks/use-auth-session";
-
-function EnsureAuthSession() {
-  useEnsureAuthSession();
-  return null;
-}
+import { EnsureAuthSession } from "@/components/EnsureAuthSession";
 
 /**
  * === NEXT.JS GOOGLE FONTS ("next/font/google") ===
