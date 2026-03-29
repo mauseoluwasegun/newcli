@@ -83,7 +83,10 @@ export const getMessagesByChatId = query({
 export const getMessagesWithImages = query({
   handler: async (ctx) => {
     const authUser = await betterAuthComponent.getAuthUser(ctx);
-    if (!authUser) throw new ConvexError("Unauthorized");
+    if (!authUser) {
+      // Return empty array for unauthenticated users
+      return [];
+    }
 
     const messagesWithImages = await ctx.db
       .query("messages")
@@ -483,7 +486,12 @@ export const search = query({
     const authUser = await betterAuthComponent.getAuthUser(ctx);
 
     if (!authUser) {
-      throw new ConvexError("Unauthorized");
+      // Allow unauthenticated users to see empty results
+      return {
+        results: [],
+        isLoaded: true,
+        continuation: null,
+      };
     }
 
     const userId = authUser.userId as Id<"users">;
@@ -537,7 +545,13 @@ export const getMany = query({
     const authUser = await betterAuthComponent.getAuthUser(ctx);
 
     if (!authUser) {
-      throw new ConvexError("Unauthorized");
+      // Allow unauthenticated users to see empty results
+      // (anonymous users will be signed in automatically on the client)
+      return {
+        results: [],
+        isLoaded: true,
+        continuation: null,
+      };
     }
     const userId = authUser.userId as Id<"users">;
 

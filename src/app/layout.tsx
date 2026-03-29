@@ -26,6 +26,17 @@ import { ConvexQueryCacheProvider } from "convex-helpers/react/cache/provider";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 /**
+ * === ANONYMOUS AUTH AUTO-SIGN-IN ===
+ * Ensures users are automatically signed in as anonymous if they don't have a session.
+ */
+import { useEnsureAuthSession } from "@/hooks/use-auth-session";
+
+function EnsureAuthSession() {
+  useEnsureAuthSession();
+  return null;
+}
+
+/**
  * === NEXT.JS GOOGLE FONTS ("next/font/google") ===
  * Self-hosts Google Fonts at build time for better performance (no external requests).
  * - Geist: Clean sans-serif font (used as the main body font).
@@ -104,6 +115,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Toaster expand={false} duration={2000} />
+            <EnsureAuthSession />
             <ConvexQueryCacheProvider>{children}</ConvexQueryCacheProvider>
           </ThemeProvider>
         </ConvexClientProvider>
