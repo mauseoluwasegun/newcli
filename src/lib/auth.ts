@@ -1,9 +1,9 @@
 /**
  * === CONVEX SERVER TYPES ===
- * Auto-generated types from Convex.
+ * createAuth is used in both queries and actions, so we accept a generic context type.
  */
-import type { GenericQueryCtx } from "convex/server";
-import type { DataModel } from "@convex/_generated/dataModel";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyCtx = any;
 
 /**
  * === CONVEX + BETTER-AUTH INTEGRATION ("@convex-dev/better-auth") ===
@@ -30,9 +30,9 @@ import { anonymous } from "better-auth/plugins";
 import { betterAuth } from "better-auth";
 
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "https://newcli-theta.vercel.app";
 
-const createOptions = (ctx: GenericQueryCtx<DataModel>) => ({
+const createOptions = (ctx: AnyCtx) => ({
   baseURL,
   database: convexAdapter(ctx, betterAuthComponent),
   socialProviders: {
@@ -65,7 +65,7 @@ const createOptions = (ctx: GenericQueryCtx<DataModel>) => ({
   ],
 });
 
-export const createAuth = (ctx: GenericQueryCtx<DataModel>) => {
+export const createAuth = (ctx: GenericActionCtx<DataModel>) => {
   const options = createOptions(ctx);
   return betterAuth({
     ...options,
