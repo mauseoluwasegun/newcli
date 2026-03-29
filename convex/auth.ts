@@ -152,8 +152,10 @@ export const getCurrentUser = query({
     // logged-in user data from DB
     const user = await ctx.db.get(userMetadata.userId as Id<"users">);
 
+    // user document might not exist yet if user was just created
+    // Merge user DB data (if exists) with userMetadata
     return {
-      ...user,
+      ...(user ?? {}),
       ...userMetadata,
     };
   },

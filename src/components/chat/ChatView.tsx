@@ -153,6 +153,7 @@ const ChatView = ({ chatId, autoResume, chatStatus }: Props) => {
           trigger,
           messageId,
         }) => {
+          const safeBody = body ?? {};
           if (trigger === "regenerate-message") {
             return {
               body: {
@@ -160,7 +161,7 @@ const ChatView = ({ chatId, autoResume, chatStatus }: Props) => {
                 id,
                 messageId,
                 timezone: userTimeZone,
-                ...body,
+                ...safeBody,
               },
             };
           }
@@ -169,7 +170,7 @@ const ChatView = ({ chatId, autoResume, chatStatus }: Props) => {
               message: messages[messages.length - 1],
               id,
               timezone: userTimeZone,
-              ...body,
+              ...safeBody,
             },
           };
         },
