@@ -72,3 +72,24 @@ export const createAuth = (ctx: GenericActionCtx<DataModel>) => {
     plugins: [...options.plugins, convex({ options })],
   });
 };
+
+/**
+ * Auth route handler for Next.js App Router.
+ * Proxies auth requests to the Convex deployment where the actual auth logic runs.
+ */
+export const auth = {
+  handler: async (request: Request): Promise<Response> => {
+    const requestUrl = new URL(request.url);
+    const convexSiteUrl =
+      process.env.NEXT_PUBLIC_CONVEX_SITE_URL ??
+      process.env.NEXT_PUBLIC_CONVEX_URL ??
+      "https://modest-bison-757.eu-west-1.convex.cloud";
+    if (!convexSiteUrl) {
+      throw new Error("NEXT_PUBLIC_CONVEX_SITE_URL is not set");
+    }
+    const nextUrl = `${convexSiteUrl}${requestUrl.pathname}${requestUrl.search}`;
+    const newRequest = new Request(nextUrl, request);
+    newRequest.headers.set("accept-encoding", "application/json");
+    return fetch(newRequest, { method: request.method, redirect: "manual" });
+  },
+};
