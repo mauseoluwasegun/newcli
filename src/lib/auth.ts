@@ -1,9 +1,9 @@
 /**
  * === CONVEX SERVER TYPES ===
- * Auto-generated types from Convex. GenericCtx is the context object
- * passed to every Convex function — gives access to the database, auth, etc.
+ * Auto-generated types from Convex. Context object is passed to every Convex function
+ * and gives access to the database, auth, etc.
+ * Note: Using inferred type to avoid GenericCtx import issues.
  */
-import type { GenericCtx } from "@convex/_generated/server";
 
 /**
  * === CONVEX + BETTER-AUTH INTEGRATION ("@convex-dev/better-auth") ===
@@ -32,7 +32,7 @@ import { betterAuth } from "better-auth";
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-const createOptions = (ctx: GenericCtx) => ({
+const createOptions = (ctx) => ({
   baseURL,
   database: convexAdapter(ctx, betterAuthComponent),
   socialProviders: {
@@ -53,7 +53,7 @@ const createOptions = (ctx: GenericCtx) => ({
     },
   },
   trustedOrigins: [
-    "https://incligene.vercel.app",
+    "https://newcli-theta.vercel.app",
     "http://localhost:3000",
   ],
   plugins: [
@@ -65,7 +65,7 @@ const createOptions = (ctx: GenericCtx) => ({
   ],
 });
 
-export const createAuth = (ctx: GenericCtx) => {
+export const createAuth = (ctx) => {
   const options = createOptions(ctx);
   return betterAuth({
     ...options,
