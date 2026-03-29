@@ -558,10 +558,11 @@ export const getMany = query({
     if (!authUser) {
       // Allow unauthenticated users to see empty results
       // (anonymous users will be signed in automatically on the client)
+      // Return a proper pagination result expected by usePaginatedQuery
       return {
-        results: [],
-        isLoaded: true,
-        continuation: null,
+        page: [],
+        isDone: true,
+        nextCursor: null,
       };
     }
     const userId = authUser.userId as Id<"users">;
