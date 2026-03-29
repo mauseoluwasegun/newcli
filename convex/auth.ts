@@ -142,22 +142,28 @@ export const RESET_WINDOW = 1 * 12 * 60 * 60 * 1000;
 export const getCurrentUser = query({
   args: {},
   handler: async (ctx) => {
-    // user data from better-auth (email, name, etc)
-    const userMetadata = await betterAuthComponent.getAuthUser(ctx);
+    try {
+      // user data from better-auth (email, name, etc)
+      const userMetadata = await betterAuthComponent.getAuthUser(ctx);
 
-    if (!userMetadata) {
+      if (!userMetadata) {
+        return null;
+      }
+
+      // logged-in user data from DB
+      const user = await ctx.db.get(userMetadata.userId as Id<"users">);
+
+      // user document might not exist yet if user was just created
+      // Merge user DB data (if exists) with userMetadata
+      return {
+        ...(user ?? {}),
+        ...userMetadata,
+      };
+    } catch (error) {
+      console.error("Error in getCurrentUser:", error);
+      // Return null to indicate no user on error
       return null;
     }
-
-    // logged-in user data from DB
-    const user = await ctx.db.get(userMetadata.userId as Id<"users">);
-
-    // user document might not exist yet if user was just created
-    // Merge user DB data (if exists) with userMetadata
-    return {
-      ...(user ?? {}),
-      ...userMetadata,
-    };
   },
 });
 

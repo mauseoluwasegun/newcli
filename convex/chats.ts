@@ -44,11 +44,16 @@ import { internal } from "./_generated/api";
 export const getChatByUUID = query({
   args: { chatId: v.string() },
   handler: async (ctx, { chatId }) => {
-    const chat = await ctx.db
-      .query("chats")
-      .withIndex("by_uuid", (q) => q.eq("id", chatId))
-      .first();
-    return chat || null;
+    try {
+      const chat = await ctx.db
+        .query("chats")
+        .withIndex("by_uuid", (q) => q.eq("id", chatId))
+        .first();
+      return chat || null;
+    } catch (error) {
+      console.error("Error fetching chat by UUID:", chatId, error);
+      return null;
+    }
   },
 });
 
@@ -71,12 +76,18 @@ export const getMessagesByChatId = query({
       return [];
     }
 
-    const messages = await ctx.db
-      .query("messages")
-      .withIndex("by_chat_created", (q) => q.eq("chatId", chatId))
-      .collect();
+    try {
+      const messages = await ctx.db
+        .query("messages")
+        .withIndex("by_chat_created", (q) => q.eq("chatId", chatId))
+        .collect();
 
-    return messages;
+      return messages;
+    } catch (error) {
+      console.error("Error fetching messages for chat:", chatId, error);
+      // Return empty array on error to prevent client crash
+      return [];
+    }
   },
 });
 
