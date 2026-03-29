@@ -15,36 +15,14 @@ import { useEffect, useState } from "react";
 
 const AuthGate = ({ children }: { children: React.ReactNode }) => {
   const [ready, setReady] = useState(false);
+  const session = authClient.useSession();
 
   useEffect(() => {
-    let cancelled = false;
-
-    const init = async () => {
-      const session = await authClient.getSession();
-      console.log("Session", session);
-
-      if (!cancelled) {
-        if (!session.data?.user) {
-          console.log("Signing in anonymously");
-          await authClient.signIn.anonymous(
-            {},
-            {
-              onError: (ctx) => {
-                console.error(ctx.error.message);
-              },
-            }
-          );
-        }
-        setReady(true);
-      }
-    };
-
-    init();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    // When a session with a user becomes available, we're ready
+    if (session?.data?.user) {
+      setReady(true);
+    }
+  }, [session]);
 
   if (!ready) {
     return (
