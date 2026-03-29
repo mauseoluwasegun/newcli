@@ -221,7 +221,7 @@ const ChatView = ({ chatId, autoResume, chatStatus }: Props) => {
                 prev.some((m: UIMessage) => m.id === message.id)
               )
                 return prev;
-              return [...prev, message];
+              return [...(prev || []), message];
             });
           }
         } catch (err) {
