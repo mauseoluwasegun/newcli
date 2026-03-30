@@ -85,7 +85,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
             setMessages((prev) => {
               if (message.id && prev.some((m) => m.id === message.id))
                 return prev;
-              return [...prev, message];
+              return [...(prev || []), message];
             });
           }
         } catch (err) {
